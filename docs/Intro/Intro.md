@@ -1,16 +1,37 @@
+<style TYPE="text/css">
+code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+</style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
 # An Arm based mini cluster
 
 ## Introduction
 
 We hereby describe various tools used to setup a small cluster of 4 arm boxes targeting scientific computing applications.
 
-### Hardware
+## Hardware
 
+### Board
 Of course, one does not build a powerful cluster for scientific with low-end hardware, here the project mainly aims at providing a support for learning distributed computing.
 
 One is generally interested to setup a cluster of computer in order to leverage the power of parallel computing. When using the right algorithm, one can enjoy a good scalability with the number of nodes, but it is also interesting to exploit parallel computing within each node.
 
-This is why we chose one of the cheapest computer providing 8 arm core, for a modest price of only 55$ per compute node: the H96 pro + android based TV box, which features the following hardware (from [cnx-software website](http://www.cnx-software.com/2016/04/06/amlogic-s912-processor-specifications/) ):
+This is why we chose one of the cheapest computer providing 8 arm core, for a modest price of only 55\$ per compute node: the H96 pro + android based TV box, which features the following hardware (from [cnx-software website](http://www.cnx-software.com/2016/04/06/amlogic-s912-processor-specifications/) ):
 
 ![alt text](../img/adpic.jpg "Ad picture")
 
@@ -92,5 +113,36 @@ This is why we chose one of the cheapest computer providing 8 arm core, for a mo
   * Secured IO and secured clock
 * Package – LFBGA 15 x 15 mm, 0.65 ball pitch, RoHS compliant
 
+### The S912 SOC
+
 Block diagram of the S912 chip:
 ![alt text](../img/Amlogic_S912_Block_Diagram.png "BlockDiagram")
+
+
+### The CPU
+
+As presented earlier, the cpu is a ARMv8-A 64 bits (AArch64) octa core arm A53, in big.LITTLE mode. This nean that there is 4 A53 cores at 2GHz, and another 4 A53 at 1.5 GHz. It is a very famous processor, in part because it is also featured in the raspberry Pi3.
+More informations can be found on wikipedia : [](https://www.arm.com/products/processors/cortex-a/cortex-a53-processor.php)
+
+In particular, the following informations can be found on what this architecture features:
+* 8-stage pipelined processor with 2-way superscalar, in-order execution pipeline
+* DSP and NEON SIMD extensions are mandatory per core
+* VFPv4 Floating Point Unit onboard (per core)
+* Hardware virtualization support
+* TrustZone security extensions
+* 64-byte cache lines
+* 10-entry L1 TLB, and 512-entry L2 TLB
+* 4 KiB conditional branch predictor, 256-entry indirect branch predictor
+
+One can compute the theoretical peak performance for single and double precision, using the following equation:
+MF x NC x NVAI x SV x FOF
+
+
+Where we have:
+* MF stands for Maximum Frequency of the cpu, which 2GHz for the big part, and 1.5 GHz for the LITTLE part
+* NC stands for Number of Core, ie 4 for both the big and LITTLE part of the cpu
+* NVAI stands for Number of Vectorized Arithmetic Instructions, and is given per cycle and per core. In the case of the A53, which is a member of the ARMv8-A family, it supports 128 bits vectors, and can perform one FMAC in 18-21 cycles to output 4 single precision scalars, and 19/26 cycles to output 2 double precision values.
+* SV stands for Size of Vector, it stands for the number of scalar that can be processed per vectorized arithmetic instruction, which is equal to 4 for single precision and 2 for double precision as stated earlier
+* FOF stands for Fused Operation Factor, and it is equal to the number of vectorized arithmetic operations that can be fused in a single instruction, which is equal to 2 in the case of the fused multiplication-addition operation (FMAC) for the NEON instruction set.
+
+Maximum arithmetic throughput is obtained when using the simd vectorized arithmetic units, that can perform a fused multiplication and addition in a single cycle over
