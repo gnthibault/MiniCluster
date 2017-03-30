@@ -13,7 +13,8 @@ One is generally interested to setup a cluster of computer in order to leverage 
 
 This is why we chose one of the cheapest computer providing 8 arm core, for a modest price of only 55\$ per compute node: the H96 pro + android based TV box, which features the following hardware (from [cnx-software website](http://www.cnx-software.com/2016/04/06/amlogic-s912-processor-specifications/) ):
 
-![alt text](../img/adpic.png "AdPicture")
+<img src="../img/adpic.png" alt="Drawing" style="width: 500px;"/>
+<!-- ![alt text](../img/adpic.png "AdPicture") -->
 
 * CPU Sub-system –  Octa core ARM Cortex-A53 CPU up to 2 GHz (DVFS) with two CPU clusters one optimized for high performance (big) and the other for low power (LITTLE) at 1 GHz
 * 3D Graphics Processing Unit –ARM Mali-T820MP3 GPU up to 750MHz (DVFS) with 3 shader engines supporting OpenGL ES 1.1/2.03.1, DirectX 11 FL9_3, OpenCL 1.1/1.2 full profile and RenderScript.
