@@ -35,7 +35,7 @@ This is why we chose one of the cheapest computer providing 8 arm core, for a mo
 
 ![alt text](../img/adpic.jpg "Ad picture")
 
-* CPU Sub-system –  Octa core ARM Cortex-A53 CPU up to 2 GHz (DVFS) with two CPU clusters one optimized for high performance (big) and the other for low power (LITTLE) at 1.5 GHz
+* CPU Sub-system –  Octa core ARM Cortex-A53 CPU up to 2 GHz (DVFS) with two CPU clusters one optimized for high performance (big) and the other for low power (LITTLE) at 1 GHz
 * 3D Graphics Processing Unit –ARM Mali-T820MP3 GPU up to 750MHz (DVFS) with 3 shader engines supporting OpenGL ES 1.1/2.03.1, DirectX 11 FL9_3, OpenCL 1.1/1.2 full profile and RenderScript.
 * 2.5D Graphics Processor – Fast bitblt engine with dual inputs and single output, programmable raster operations (ROP) and polyphase scaling filter, etc..
 * Crypto Engine – AES/AES-XTS block cipher with 128/192/256 bits keys, DES/TDES block cipher, hardware crypto key-ladder operation and DVB-CSA for transport stream encryption,  built-in hardware True Random Number Generator (TRNG), CRC and SHA-1/SHA-2/HMAC SHA engine
@@ -121,7 +121,7 @@ Block diagram of the S912 chip:
 
 ### The CPU
 
-As presented earlier, the cpu is a ARMv8-A 64 bits (AArch64) octa core arm A53, in big.LITTLE mode. This nean that there is 4 A53 cores at 2GHz, and another 4 A53 at 1.5 GHz. It is a very famous processor, in part because it is also featured in the raspberry Pi3.
+As presented earlier, the cpu is a ARMv8-A 64 bits (AArch64) octa core arm A53, in big.LITTLE mode. This nean that there is 4 A53 cores at 2GHz, and another 4 A53 at 1 GHz. It is a very famous processor, in part because it is also featured in the raspberry Pi3.
 More informations can be found on wikipedia : [](https://www.arm.com/products/processors/cortex-a/cortex-a53-processor.php)
 
 In particular, the following informations can be found on what this architecture features:
@@ -139,7 +139,7 @@ MF x NC x NVAI x SV x FOF
 
 
 Where we have:
-* MF stands for Maximum Frequency of the cpu, which 2GHz for the big part, and 1.5 GHz for the LITTLE part
+* MF stands for Maximum Frequency of the cpu, which 2GHz for the big part, and 1 GHz for the LITTLE part
 * NC stands for Number of Core, ie 4 for both the big and LITTLE part of the cpu
 * NVAI stands for Number of Vectorized Arithmetic Instructions, and is given per cycle and per core. In the case of the A53, which is a member of the ARMv8-A family, it supports 128 bits vectors, and can perform one FMAC in 18-21 cycles to output 4 single precision scalars, and 19/26 cycles to output 2 double precision values.
 * SV stands for Size of Vector, it stands for the number of scalar that can be processed per vectorized arithmetic instruction, which is equal to 4 for single precision and 2 for double precision as stated earlier
