@@ -146,3 +146,18 @@ Where we have:
 * FOF stands for Fused Operation Factor, and it is equal to the number of vectorized arithmetic operations that can be fused in a single instruction, which is equal to 2 in the case of the fused multiplication-addition operation (FMAC) for the NEON instruction set.
 
 Maximum arithmetic throughput is obtained when using the simd vectorized arithmetic units, that can perform a fused multiplication and addition in a single cycle over
+
+Many interesting informations related to the A53 architecture can be found on [Arm website](https://developer.arm.com/products/processors/cortex-a/cortex-a53) and in particular the range of configuration that can be used for implementing the A53 architecture:
+
+| Feature | Range of options |
+| -------- | ---------- |
+|Number of cores | Up to four cores.
+|L1 Instruction cache size | 8K - 16K - 32K - 64K|
+|L1 Data cache size | 8K - 16K - 32K - 64K.|
+|L2 cache | Included or not |
+|L2 cache size | 128K - 256K - 512K - 1024K - 2048K |
+|L2 data RAM input latency | 1 cycle - 2 cycles |
+|L2 data RAM output latency | 2 cycles - 3 cycles|
+|Advanced SIMD and Floating-point Extension | Included or not|
+|Cryptography Extension | Included or not|
+|Accelerator Coherency Port (ACP)b | Included or not|
