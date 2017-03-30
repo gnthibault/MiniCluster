@@ -1,23 +1,3 @@
-<style TYPE="text/css">
-code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
-</style>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
-    }
-});
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
-</script>
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-
 # An Arm based mini cluster
 
 ## Introduction
@@ -33,7 +13,7 @@ One is generally interested to setup a cluster of computer in order to leverage 
 
 This is why we chose one of the cheapest computer providing 8 arm core, for a modest price of only 55\$ per compute node: the H96 pro + android based TV box, which features the following hardware (from [cnx-software website](http://www.cnx-software.com/2016/04/06/amlogic-s912-processor-specifications/) ):
 
-![alt text](../img/adpic.jpg "Ad picture")
+![alt text](../img/adpic.jpg "Adpicture")
 
 * CPU Sub-system –  Octa core ARM Cortex-A53 CPU up to 2 GHz (DVFS) with two CPU clusters one optimized for high performance (big) and the other for low power (LITTLE) at 1 GHz
 * 3D Graphics Processing Unit –ARM Mali-T820MP3 GPU up to 750MHz (DVFS) with 3 shader engines supporting OpenGL ES 1.1/2.03.1, DirectX 11 FL9_3, OpenCL 1.1/1.2 full profile and RenderScript.
