@@ -122,7 +122,7 @@ Block diagram of the S912 chip:
 ### The CPU
 
 As presented earlier, the cpu is a ARMv8-A 64 bits (AArch64) octa core arm A53, in big.LITTLE mode. This nean that there is 4 A53 cores at 2GHz, and another 4 A53 at 1 GHz. It is a very famous processor, in part because it is also featured in the raspberry Pi3.
-More informations can be found on wikipedia : [](https://www.arm.com/products/processors/cortex-a/cortex-a53-processor.php)
+More informations can be found on [wikipedia](https://www.arm.com/products/processors/cortex-a/cortex-a53-processor.php)
 
 In particular, the following informations can be found on what this architecture features:
 * 8-stage pipelined processor with 2-way superscalar, in-order execution pipeline
