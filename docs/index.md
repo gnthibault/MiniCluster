@@ -5,7 +5,7 @@ You will find some introductory words here:
 
 Then there is the linux distribution build page:[Linux Build](LinuxBuild/LinuxBuild.md)
 
-The software stack installation: [software tools](sotwareTools/softwareTools.md)
+The software stack installation: [software tools](softwareTools/softwareTools.md)
 
 The single node benchmarking for scientific applications:
 
