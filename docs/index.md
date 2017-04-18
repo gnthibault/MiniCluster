@@ -5,11 +5,10 @@ You will find some introductory words here:
 
 Then there is the linux distribution build page:[Linux Build](LinuxBuild/LinuxBuild.md)
 
+The software stack installation: [software tools](sotwareTools/softwareTools.md)
 
 The single node benchmarking for scientific applications:
 
 The network benchmarking:
-
-The slurm setup:
 
 The scientific distributed application benchmark:
