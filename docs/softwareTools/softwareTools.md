@@ -4,29 +4,81 @@
 
 We first want to copy our own ssh public key to the root user account so that we can login without password to every node
 ```bash
-  for ((i=2; i<6; i++)); do ssh-copy-id root@192.168.0.$i ; done
+  for ((i=4; i<8; i++)); do ssh-copy-id root@192.168.0.$i ; done
 ```
 
 Then we will create the user "user", with password "user" on every node:
 ```bash
-  for ((i=2; i<6; i++)); do ssh root@192.168.0.$i "useradd --create-home -p $(openssl passwd -1 user) user" ; done
+  for ((i=4; i<8; i++)); do ssh root@192.168.0.$i "useradd --create-home -p \$(openssl passwd -1 user) -s /bin/bash user" ; done
 ```
 
 And also give them our local public key
 ```bash
-  for ((i=2; i<6; i++)); do ssh-copy-id user@192.168.0.$i ; done
+  for ((i=4; i<8; i++)); do ssh-copy-id user@192.168.0.$i ; done
 ```
 
 Then we will give all nodes the same ssh-key as the one we are currently using
 ```bash
-  for ((i=2; i<6; i++)); do scp ~/.ssh/id_rsa user@192.168.0.$i/.ssh/ ; done
+  for ((i=4; i<8; i++)); do scp ~/.ssh/id_rsa* user@192.168.0.$i:/home/user/.ssh/ ; done
+```
+
+Now, to enable passwordless ssh, we should do, for each node
+
+```bash
+  eval `ssh-agent`
+  ssh-add ~/.ssh/id_dsa
 ```
 
 We are now able to run any script on all nodes with
 ```bash
-  for ((i=2; i<6; i++)); do ssh user@192.168.0.$i 'bash -s' < local_script.sh ; done
+  for ((i=4; i<8; i++)); do ssh user@192.168.0.$i 'bash -s' < local_script.sh ; done
 ```
 
+## Host file
+As is it probably easier to manipulate hostname than ip address, we will use a host file in order to ease our system administration job:
+```bash
+cat ./hosts
+127.0.0.1   localhost
+
+#MPI CLUSTER SETUP
+192.168.0.4    node0
+192.168.0.5    node1
+192.168.0.5    node2
+192.168.0.6    node3
+```
+And then, copy that to each node:
+```bash
+  for ((i=4; i<8; i++)); do scp ./hosts root@192.168.0.$i:/etc/; done
+```
+
+## Setuping NFS
+### Common part
+Both server and clients will need the common packages, and create a dedicated directory scratch that will be shared across nodes
+```bash
+  for ((i=0; i<4; i++)); do ssh user@node$i "mkdir /home/user/scratch" ; done
+```
+And install the right packages
+```bash
+  for ((i=0; i<3; i++)); do ssh root@node$i "apt-get install nfs-common"; done
+```
+
+### Server side
+
+In order to share datafiles, we are interested in setting up a network file system, but we have to choose one node (192.168.0.4) that will be the server of our nfs:
+```bash
+  ssh root@node0 "apt-get install nfs-kernel-server; echo \"/home/user/scratch *(rw,sync,no_root_squash,no_subtree_check)\" >> /etc/exports; exportfs -a; service nfs-kernel-server restart" ; done
+```
+
+### Client side
+Every other nodes will have to mount the nfs:
+```bash
+  for ((i=1; i<3; i++)); do ssh root@node$i "echo \"node0:/home/user/scratch /home/user/scratch nfs\" >> /etc/fstab; mount -a"; done
+```
+
+you can also mount the nfs on your own computer with
+```bash
+  sudo mount -t nfs node0:/home/user/scratch ~/scratch
+```
 
 ## Installing slurm
 
