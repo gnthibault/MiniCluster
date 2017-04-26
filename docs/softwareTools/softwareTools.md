@@ -87,6 +87,22 @@ you can also mount the nfs on your own computer with
 ## Installing slurm
 Nothing here for now
 
+## Installing Eigen
+
+take a look at this page: http://eigen.tuxfamily.org/index.php?title=Main_Page
+login to node0 for instance, and do
+```bash
+  wget http://bitbucket.org/eigen/eigen/get/3.3.3.tar.bz2
+  tar -xvf ./3.3.3.tar.bz2
+  cd ; mkdir build; cd build; cmake ..
+  make 
+```
+
+Then install to all nodes:
+```bash
+  for ((i=0; i<4; i++)); do ssh root@node$i "apt-get install cmake libboost-all-dev -y" ; done
+  for ((i=0; i<4; i++)); do ssh root@node$i "cd /home/user/scratch/projects/eigen-eigen-67e894c6cd8f/build ; make install" ; done
+```
 ## Installing scalapack
 
 For distributed linear algebra task, we use the scalapack software stack, to do so, just run:
