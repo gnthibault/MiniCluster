@@ -162,9 +162,8 @@ make; make install
 # Get DPLASMA
 ```bash
   apt-get install bison flex -y
-  wget http://icl.cs.utk.edu/projectsfiles/parsec/pubs/parsec_2b39da2e4087.tgz
-  tar -xvf parsec_2b39da2e4087.tgz
-  cd parsec_2b39da2e4087; mkdir build; cd build; cmake ..; make -j8; make install
+  git clone https://bitbucket.org/icldistcomp/parsec.git  
+  cd parsec; mkdir build; cd build; cmake ..; make -j8; make install
 ```
 
 # Network
