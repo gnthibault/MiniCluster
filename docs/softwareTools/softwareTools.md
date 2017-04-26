@@ -114,7 +114,7 @@ echo
 # Compilers, linker/loaders, the archiver, and their options.
 
 # Install directory
-prefix    = /usr/local/lib
+prefix    = /usr/local/
 
 # To speed up the compilation
 MAKE      = make -j8
