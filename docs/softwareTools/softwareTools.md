@@ -12,43 +12,47 @@ Then we will create the user "user", with password "user" on every node:
   for ((i=4; i<8; i++)); do ssh root@192.168.0.$i "useradd --create-home -p \$(openssl passwd -1 user) -s /bin/bash user" ; done
 ```
 
-And also give them our local public key
+And also give them our local public key, which can also be interesting to checkout private github repo
 ```bash
   for ((i=4; i<8; i++)); do ssh-copy-id user@192.168.0.$i ; done
 ```
 
-Then we will give all nodes the same ssh-key as the one we are currently using
+Then we will generate a passphrase-less rsa keypair on the host node, and copy it to every node:
 ```bash
-  for ((i=4; i<8; i++)); do scp ~/.ssh/id_rsa* user@192.168.0.$i:/home/user/.ssh/ ; done
+  ssh-keygen -t rsa
+  for ((i=4; i<8; i++)); do scp ./id_rsa* user@192.168.0.$i:/home/user/.ssh/ ; done
 ```
 
-Now, to enable passwordless ssh, we should do, for each node
+Now, to enable passwordless ssh, we should do, from the first node for example
 
 ```bash
-  eval `ssh-agent`
-  ssh-add ~/.ssh/id_dsa
+    for ((i=5; i<8; i++)); do ssh-copy-id user@192.168.0.$i ; done
 ```
+Excellet, now every node can ssh to any other one without password
 
-We are now able to run any script on all nodes with
+We are now also able to run any script on all nodes with
 ```bash
   for ((i=4; i<8; i++)); do ssh user@192.168.0.$i 'bash -s' < local_script.sh ; done
 ```
 
 ## Host file
-As is it probably easier to manipulate hostname than ip address, we will use a host file in order to ease our system administration job:
-```bash
-cat ./hosts
-127.0.0.1   localhost
+As is it probably easier to manipulate hostname than ip address, we will use a host file in order to ease our system administration job. To do so we will use the following script (named hosts.sh):
 
-#MPI CLUSTER SETUP
-192.168.0.4    node0
-192.168.0.5    node1
-192.168.0.5    node2
-192.168.0.6    node3
-```
-And then, copy that to each node:
 ```bash
-  for ((i=4; i<8; i++)); do scp ./hosts root@192.168.0.$i:/etc/; done
+  #!/bin/bash
+
+  echo "
+  #MPI CLUSTER SETUP
+  192.168.0.4    node0
+  192.168.0.5    node1
+  192.168.0.6    node2
+  192.168.0.7    node3" >> /etc/hosts
+```
+
+And then, launch it to each node:
+
+```bash
+  for ((i=4; i<8; i++)); do ssh root@node$i 'bash -s' < hosts.sh ; done
 ```
 
 ## Setuping NFS
@@ -59,34 +63,35 @@ Both server and clients will need the common packages, and create a dedicated di
 ```
 And install the right packages
 ```bash
-  for ((i=0; i<3; i++)); do ssh root@node$i "apt-get install nfs-common"; done
+  for ((i=0; i<4; i++)); do ssh root@node$i "apt-get install nfs-common -y"; done
 ```
 
 ### Server side
 
 In order to share datafiles, we are interested in setting up a network file system, but we have to choose one node (192.168.0.4) that will be the server of our nfs:
 ```bash
-  ssh root@node0 "apt-get install nfs-kernel-server; echo \"/home/user/scratch *(rw,sync,no_root_squash,no_subtree_check)\" >> /etc/exports; exportfs -a; service nfs-kernel-server restart" ; done
+  ssh root@node0 "apt-get install nfs-kernel-server; echo \"/home/user/scratch *(rw,sync,no_root_squash,no_subtree_check)\" >> /etc/exports; exportfs -a; service nfs-kernel-server restart"
 ```
 
 ### Client side
 Every other nodes will have to mount the nfs:
 ```bash
-  for ((i=1; i<3; i++)); do ssh root@node$i "echo \"node0:/home/user/scratch /home/user/scratch nfs\" >> /etc/fstab; mount -a"; done
+  for ((i=1; i<4; i++)); do ssh root@node$i "echo \"node0:/home/user/scratch /home/user/scratch nfs\" >> /etc/fstab; mount -a"; done
 ```
 
 you can also mount the nfs on your own computer with
 ```bash
-  sudo mount -t nfs node0:/home/user/scratch ~/scratch
+  sudo mount -t nfs node0:/home/user/scratch ~/scratch; sudo chown $USER:$USER ~/scratch/
 ```
 
 ## Installing slurm
+Nothing here for now
 
 ## Installing scalapack
 
 For distributed linear algebra task, we use the scalapack software stack, to do so, just run:
 ```bash
-  sudo apt-get install libatlas-base-dev libatlas-dev libopenmpi-dev libscalapack-mpi-dev -y
+  for ((i=0; i<4; i++)); do ssh root@node$i "apt-get install libatlas-base-dev libatlas-dev libopenmpi-dev libscalapack-mpi-dev -y"; done
 ```
 
 ## Installing parsec
