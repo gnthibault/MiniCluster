@@ -86,7 +86,7 @@ you can also mount the nfs on your own computer with
 
 For distributed linear algebra task, we use the scalapack software stack, to do so, just run:
 ```bash
-  sudo apt-get install libatlas-dev libopenmpi-dev libscalapack-mpi-dev -y
+  sudo apt-get install libatlas-base-dev libatlas-dev libopenmpi-dev libscalapack-mpi-dev -y
 ```
 
 ## Installing parsec
@@ -100,17 +100,71 @@ to get everything to work:
 
 # Get PLASMA
 ```bash
-  apt-get install hwloc pkg-config
+  apt-get install -y hwloc pkg-config
   wget http://icl.cs.utk.edu/projectsfiles/plasma/pubs/plasma_2.8.0.tar.gz
   tar -xvf ./plasma_2.8.0.tar.gz
   rm -rf ./plasma_2.8.0.tar.gz
   cd plasma_2.8.0/
 ```
 
+And modify the make.inc as follow:
+```
+echo
+"# Those variables have to be changed accordingly!
+# Compilers, linker/loaders, the archiver, and their options.
+
+# Install directory
+prefix    = /usr/local/lib
+
+# To speed up the compilation
+MAKE      = make -j8
+
+CC        = gcc
+FC        = gfortran
+LOADER    = gcc -dynamic
+
+ARCH      = ar
+ARCHFLAGS = cr
+RANLIB    = ranlib
+
+CFLAGS    = -O2 -DADD_ 
+FFLAGS    = -O2 
+LDFLAGS   = -O2
+
+# To compile Fortran 90 interface
+PLASMA_F90 =  1
+
+# To compile Plasma with EZTrace library in order to trace events
+# (Don’t forget to set correctly PKG_CONFIG_PATH to make `pkg-config --libs eztrace` works)
+PLASMA_TRACE= 0
+
+# By sequential kernel
+# CFLAGS += -DTRACE_BY_KERNEL
+
+# By parallel plasma function (Works only with dynamic scheduler)
+# CFLAGS += -DTRACE_BY_FUNCTION
+
+# Blas Library
+LIBBLAS     = -L/usr/lib -lblas -lgfortran
+# CBlas library
+LIBCBLAS    = -L/usr/lib -lcblas
+# lapack and tmg library (lapack is included in acml)
+LIBLAPACK   = -L/usr/lib -llapack -ltmglib 
+INCCLAPACK  = -I/usr/include/
+LIBCLAPACK  = -L/usr/lib -llapacke" > ./make.inc
+```
+
+Then
+```
+make; make install
+```
+
 # Get DPLASMA
 ```bash
   apt-get install bison flex -y
   wget http://icl.cs.utk.edu/projectsfiles/parsec/pubs/parsec_2b39da2e4087.tgz
+  tar -xvf parsec_2b39da2e4087.tgz
+  cd parsec_2b39da2e4087; mkdir build; cd build; cmake ..; make -j8; make install
 ```
 
 # Network
