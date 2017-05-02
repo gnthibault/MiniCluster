@@ -110,6 +110,42 @@ For distributed linear algebra task, we use the scalapack software stack, to do 
   for ((i=0; i<4; i++)); do ssh root@node$i "apt-get install libatlas-base-dev libatlas-dev libopenmpi-dev libscalapack-mpi-dev -y"; done
 ```
 
+
+## installing hpx
+
+It is first recommended to get boost, hwloc and jemalloc
+```bash
+  apt-get install libboost-dev libhwloc-dev libjemalloc-dev  -y
+```
+
+Then clone hpx git repository
+
+```bash
+  git clone https://github.com/STEllAR-GROUP/hpx.git
+  cd hpx; make build; cd build
+```
+
+Then build
+
+
+```bash
+cmake \
+ -DCMAKE_BUILD_TYPE=Release \
+ -DCMAKE_INSTALL_PREFIX=/usr/local \
+ -DCMAKE_CXX_FLAGS=-std=c++14 \
+ -DCMAKE_EXE_LINKER_FLAGS=-dynamic \
+ -DHPX_WITH_HWLOC=ON \
+ -DHPX_WITH_MALLOC=JEMALLOC \
+ -DHPX_WITH_TESTS=OFF \
+ -DHPX_WITH_EXAMPLES=OFF \
+ -DHPX_WITH_PARCELPORT_MPI=ON -DHPX_WITH_PARCELPORT_MPI_MULTITHREADED=ON \
+ -DHPX_WITH_THREAD_IDLE_RATES=ON \
+ .. 
+```
+
+Then build on node0, then install on all nodes.
+
+
 ## Installing parsec
 
 We are also interested in benchmarking the parsec library, see
