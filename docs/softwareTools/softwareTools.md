@@ -220,7 +220,7 @@ make; make install
 ```bash
   apt-get install bison flex -y
   git clone https://bitbucket.org/icldistcomp/parsec.git  
-  cd parsec; mkdir build; cd build; cmake ..; make -j8; make install
+  cd parsec; mkdir build; cd build; cmake .. -DCOREBLAS_DIR=/usr/local; make -j8; make install
 ```
 
 # Network
