@@ -52,7 +52,7 @@ As is it probably easier to manipulate hostname than ip address, we will use a h
 And then, launch it to each node:
 
 ```bash
-  for ((i=4; i<8; i++)); do ssh root@node$i 'bash -s' < hosts.sh ; done
+  for ((i=0; i<4; i++)); do ssh root@node$i 'bash -s' < hosts.sh ; done
 ```
 
 ## Setuping NFS
